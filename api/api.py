@@ -122,3 +122,41 @@ def categoryDetail_api (request, pk=None):
 
     else:
         return Response({'message': 'Category not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+################## PropertyTypes ###################
+@api_view(['GET', 'POST'])
+def propertyTypes_api (request):
+    if request.method == 'GET':
+        propertyTypes = PropertyTypes.objects.all()
+        propertyTypes_serializer = PropertyTypesSerializer (categories, many = True)
+        return Response(propertyTypes_serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        propertyTypes_serializer = PropertyTypesSerializer(data = request.data)
+        if propertyTypes_serializer.is_valid():
+            propertyTypes_serializer.save()
+            return Response({'message': 'Property type created'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(propertyTypes_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def propertyTypesDetail_api (request, pk=None):
+    category = PropertyTypes.objects.filter(id=pk).first()
+
+    if category:
+        if request.method == 'GET':
+            propertyTypes_serializer = PropertyTypesSerializer(category)
+            return Response(propertyTypes_serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            propertyTypes_serializer = PropertyTypesSerializer(category, data = request.data)
+            if propertyTypes_serializer.is_valid():
+                propertyTypes_serializer.save()
+                return Response ({'message': 'Property type updated'}, status=status.HTTP_200_OK)
+            else:
+                return Response (propertyTypes_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            category.delete()
+            return Response({'message': 'Property type deleted'}, status=status.HTTP_200_OK)
+
+    else:
+        return Response({'message': 'Property type not found'}, status=status.HTTP_400_BAD_REQUEST)

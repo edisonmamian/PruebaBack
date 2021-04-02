@@ -25,4 +25,6 @@ urlpatterns = [
     path('cities/<int:pk>', cityDetail_api, name = 'cities_detail'),
     path('categories/', category_api, name = 'categories'),
     path('categories/<int:pk>', categoryDetail_api, name = 'categories_detail'),
+    path('propertyTypes/', propertyTypes_api, name = 'propertyTypes'),
+    path('propertyTypes/<int:pk>', propertyTypesDetail_api, name = 'propertyTypes_detail'),
 ]
