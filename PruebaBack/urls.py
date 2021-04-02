@@ -27,6 +27,8 @@ urlpatterns = [
     path('categories/<int:pk>', categoryDetail_api, name = 'categories_detail'),
     path('propertyTypes/', propertyTypes_api, name = 'propertyTypes'),
     path('propertyTypes/<int:pk>', propertyTypesDetail_api, name = 'propertyTypes_detail'),
-    path('transaction/', Transactions_api, name = 'transaction'),
-    path('transaction/<int:pk>', TransactionsDetail_api, name = 'transaction_detail'),
+    path('transactions/', Transactions_api, name = 'transactions'),
+    path('transactions/<int:pk>', TransactionsDetail_api, name = 'transactions_detail'),
+    path('properties/', Properties_api, name = 'properties'),
+    path('properties/<int:pk>', PropertiesDetail_api, name = 'properties_detail'),
 ]

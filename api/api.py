@@ -128,7 +128,7 @@ def categoryDetail_api (request, pk=None):
 def propertyTypes_api (request):
     if request.method == 'GET':
         propertyTypes = PropertyTypes.objects.all()
-        propertyTypes_serializer = PropertyTypesSerializer (categories, many = True)
+        propertyTypes_serializer = PropertyTypesSerializer (propertyTypes, many = True)
         return Response(propertyTypes_serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
@@ -166,7 +166,7 @@ def propertyTypesDetail_api (request, pk=None):
 def Transactions_api (request):
     if request.method == 'GET':
         transactions = Transactions.objects.all()
-        transactions_serializer = PropertyTypesSerializer (categories, many = True)
+        transactions_serializer = PropertyTypesSerializer (transactions, many = True)
         return Response(transactions_serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
@@ -198,3 +198,41 @@ def TransactionsDetail_api (request, pk=None):
 
     else:
         return Response({'message': 'Transaction not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+################## Properties ###################
+@api_view(['GET', 'POST'])
+def Properties_api (request):
+    if request.method == 'GET':
+        properties = Properties.objects.all()
+        properties_serializer = PropertiesSerializer (properties, many = True)
+        return Response(properties_serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        properties_serializer = PropertiesSerializer(data = request.data)
+        if properties_serializer.is_valid():
+            properties_serializer.save()
+            return Response({'message': 'Property created'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(properties_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def PropertiesDetail_api (request, pk=None):
+    property = Properties.objects.filter(id=pk).first()
+
+    if property:
+        if request.method == 'GET':
+            properties_serializer = PropertiesSerializer(property)
+            return Response(properties_serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            properties_serializer = PropertiesSerializer(property, data = request.data)
+            if properties_serializer.is_valid():
+                properties_serializer.save()
+                return Response ({'message': 'Property updated'}, status=status.HTTP_200_OK)
+            else:
+                return Response (properties_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            property.delete()
+            return Response({'message': 'Property deleted'}, status=status.HTTP_200_OK)
+
+    else:
+        return Response({'message': 'Property not found'}, status=status.HTTP_400_BAD_REQUEST)
