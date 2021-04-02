@@ -103,7 +103,7 @@ def category_api (request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def categoryDetail_api (request, pk=None):
-    category = Cities.objects.filter(id=pk).first()
+    category = Categories.objects.filter(id=pk).first()
 
     if category:
         if request.method == 'GET':
@@ -166,11 +166,11 @@ def propertyTypesDetail_api (request, pk=None):
 def Transactions_api (request):
     if request.method == 'GET':
         transactions = Transactions.objects.all()
-        transactions_serializer = PropertyTypesSerializer (transactions, many = True)
+        transactions_serializer = TransactionsSerializer (transactions, many = True)
         return Response(transactions_serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
-        transactions_serializer = PropertyTypesSerializer(data = request.data)
+        transactions_serializer = TransactionsSerializer(data = request.data)
         if transactions_serializer.is_valid():
             transactions_serializer.save()
             return Response({'message': 'Transaction created'}, status=status.HTTP_201_CREATED)
@@ -183,10 +183,10 @@ def TransactionsDetail_api (request, pk=None):
 
     if transaction:
         if request.method == 'GET':
-            transactions_serializer = PropertyTypesSerializer(transaction)
+            transactions_serializer = TransactionsSerializer(transaction)
             return Response(transactions_serializer.data, status=status.HTTP_200_OK)
         elif request.method == 'PUT':
-            transactions_serializer = PropertyTypesSerializer(transaction, data = request.data)
+            transactions_serializer = TransactionsSerializer(transaction, data = request.data)
             if transactions_serializer.is_valid():
                 transactions_serializer.save()
                 return Response ({'message': 'Transaction updated'}, status=status.HTTP_200_OK)
