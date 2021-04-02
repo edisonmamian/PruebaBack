@@ -141,22 +141,60 @@ def propertyTypes_api (request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def propertyTypesDetail_api (request, pk=None):
-    category = PropertyTypes.objects.filter(id=pk).first()
+    propertyType = PropertyTypes.objects.filter(id=pk).first()
 
-    if category:
+    if propertyType:
         if request.method == 'GET':
-            propertyTypes_serializer = PropertyTypesSerializer(category)
+            propertyTypes_serializer = PropertyTypesSerializer(propertyType)
             return Response(propertyTypes_serializer.data, status=status.HTTP_200_OK)
         elif request.method == 'PUT':
-            propertyTypes_serializer = PropertyTypesSerializer(category, data = request.data)
+            propertyTypes_serializer = PropertyTypesSerializer(propertyType, data = request.data)
             if propertyTypes_serializer.is_valid():
                 propertyTypes_serializer.save()
                 return Response ({'message': 'Property type updated'}, status=status.HTTP_200_OK)
             else:
                 return Response (propertyTypes_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif request.method == 'DELETE':
-            category.delete()
+            propertyType.delete()
             return Response({'message': 'Property type deleted'}, status=status.HTTP_200_OK)
 
     else:
         return Response({'message': 'Property type not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+################## Transactions ###################
+@api_view(['GET', 'POST'])
+def Transactions_api (request):
+    if request.method == 'GET':
+        transactions = Transactions.objects.all()
+        transactions_serializer = PropertyTypesSerializer (categories, many = True)
+        return Response(transactions_serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        transactions_serializer = PropertyTypesSerializer(data = request.data)
+        if transactions_serializer.is_valid():
+            transactions_serializer.save()
+            return Response({'message': 'Transaction created'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(transactions_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def TransactionsDetail_api (request, pk=None):
+    transaction = Transactions.objects.filter(id=pk).first()
+
+    if transaction:
+        if request.method == 'GET':
+            transactions_serializer = PropertyTypesSerializer(transaction)
+            return Response(transactions_serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            transactions_serializer = PropertyTypesSerializer(transaction, data = request.data)
+            if transactions_serializer.is_valid():
+                transactions_serializer.save()
+                return Response ({'message': 'Transaction updated'}, status=status.HTTP_200_OK)
+            else:
+                return Response (transactions_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            transaction.delete()
+            return Response({'message': 'Transaction deleted'}, status=status.HTTP_200_OK)
+
+    else:
+        return Response({'message': 'Transaction not found'}, status=status.HTTP_400_BAD_REQUEST)
