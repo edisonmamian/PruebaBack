@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from .serializers import *
 from .models import *
 
+
+################## STATES ###################
 @api_view(['GET', 'POST'])
 def state_api (request):
     if request.method == 'GET':
@@ -44,6 +46,8 @@ def stateDetail_api (request, pk=None):
     else:
         return Response({'message': 'State not found'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+################## CITIES ###################
 @api_view(['GET', 'POST'])
 def city_api (request):
     if request.method == 'GET':
@@ -65,10 +69,10 @@ def cityDetail_api (request, pk=None):
 
     if city:
         if request.method == 'GET':
-            cities_serializer = StatesSerializer(city)
+            cities_serializer = CitiesSerializer(city)
             return Response(cities_serializer.data, status=status.HTTP_200_OK)
         elif request.method == 'PUT':
-            cities_serializer = StatesSerializer(city, data = request.data)
+            cities_serializer = CitiesSerializer(city, data = request.data)
             if cities_serializer.is_valid():
                 cities_serializer.save()
                 return Response ({'message': 'City updated'}, status=status.HTTP_200_OK)
@@ -80,3 +84,41 @@ def cityDetail_api (request, pk=None):
 
     else:
         return Response({'message': 'City not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+################## CATEGORIES ###################
+@api_view(['GET', 'POST'])
+def category_api (request):
+    if request.method == 'GET':
+        categories = Categories.objects.all()
+        categories_serializer = CategoriesSerializer (categories, many = True)
+        return Response(categories_serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        categories_serializer = CategoriesSerializer(data = request.data)
+        if categories_serializer.is_valid():
+            categories_serializer.save()
+            return Response({'message': 'Category created'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(categories_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def categoryDetail_api (request, pk=None):
+    category = Cities.objects.filter(id=pk).first()
+
+    if category:
+        if request.method == 'GET':
+            categories_serializer = CategoriesSerializer(category)
+            return Response(categories_serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            categories_serializer = CategoriesSerializer(category, data = request.data)
+            if categories_serializer.is_valid():
+                categories_serializer.save()
+                return Response ({'message': 'Category updated'}, status=status.HTTP_200_OK)
+            else:
+                return Response (categories_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            category.delete()
+            return Response({'message': 'Category deleted'}, status=status.HTTP_200_OK)
+
+    else:
+        return Response({'message': 'Category not found'}, status=status.HTTP_400_BAD_REQUEST)

@@ -23,4 +23,6 @@ urlpatterns = [
     path('states/<int:pk>', stateDetail_api, name = 'states_detail'),
     path('cities/', city_api, name = 'cities'),
     path('cities/<int:pk>', cityDetail_api, name = 'cities_detail'),
+    path('categories/', category_api, name = 'categories'),
+    path('categories/<int:pk>', categoryDetail_api, name = 'categories_detail'),
 ]
