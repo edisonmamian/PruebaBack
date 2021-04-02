@@ -236,3 +236,41 @@ def PropertiesDetail_api (request, pk=None):
 
     else:
         return Response({'message': 'Property not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+################## Reviews ###################
+@api_view(['GET', 'POST'])
+def Reviews_api (request):
+    if request.method == 'GET':
+        reviews = Reviews.objects.all()
+        review_serializer = ReviewsSerializer (reviews, many = True)
+        return Response(review_serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        review_serializer = ReviewsSerializer(data = request.data)
+        if review_serializer.is_valid():
+            review_serializer.save()
+            return Response({'message': 'Review created'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(review_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def ReviewsDetail_api (request, pk=None):
+    review = Reviews.objects.filter(id=pk).first()
+
+    if review:
+        if request.method == 'GET':
+            review_serializer = ReviewsSerializer(review)
+            return Response(review_serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            review_serializer = ReviewsSerializer(review, data = request.data)
+            if review_serializer.is_valid():
+                review_serializer.save()
+                return Response ({'message': 'Review updated'}, status=status.HTTP_200_OK)
+            else:
+                return Response (review_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            review.delete()
+            return Response({'message': 'Review deleted'}, status=status.HTTP_200_OK)
+
+    else:
+        return Response({'message': 'Review not found'}, status=status.HTTP_400_BAD_REQUEST)

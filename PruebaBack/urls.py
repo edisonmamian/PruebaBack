@@ -31,4 +31,6 @@ urlpatterns = [
     path('transactions/<int:pk>', TransactionsDetail_api, name = 'transactions_detail'),
     path('properties/', Properties_api, name = 'properties'),
     path('properties/<int:pk>', PropertiesDetail_api, name = 'properties_detail'),
+    path('reviews/', Reviews_api, name = 'reviews'),
+    path('reviews/<int:pk>', ReviewsDetail_api, name = 'reviews_detail'),
 ]
