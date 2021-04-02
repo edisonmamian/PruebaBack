@@ -1,24 +1,12 @@
 from rest_framework import serializers
 from .models import *
 
-class StatesSerializer (serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    slug = serializers.CharField()
+class StatesSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = States
+        fields = '__all__'
 
-    def create (self, validate_data):
-        instance = States()
-        instance.slug = validate_data.get('slug')
-        instance.save()
-        return instance
-
-    def validate_slug(self, data):
-        states = States.objects.filter(slug = data)
-        if len(states) != 0:
-            raise serializers.ValidationError("This state already exits")
-        else:
-            return data
-
-class CitiesSerializer (serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    slug = serializers.CharField()
-    zip = serializers.CharField()
+class CitiesSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Cities
+        fields = '__all__'

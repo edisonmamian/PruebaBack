@@ -19,5 +19,8 @@ from api.api import *
 
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
-    path('create_state', StateApi.as_view(), name = 'create_state')
+    path('states/', state_api, name = 'states'),
+    path('states/<int:pk>', stateDetail_api, name = 'states_detail'),
+    path('cities/', city_api, name = 'cities'),
+    path('cities/<int:pk>', cityDetail_api, name = 'cities_detail'),
 ]
