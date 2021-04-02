@@ -6,7 +6,8 @@ class States (models.Model):
     slug = models.CharField(
         max_length = 20,
         null = False,
-        verbose_name = 'Slug'
+        verbose_name = 'Slug',
+        unique = True
     )
 
     def __str__(self):
